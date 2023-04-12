@@ -1,0 +1,16 @@
+{
+  "localRelay": "ws://127.0.0.1:4444",
+  "remoteRelays": [
+    "wss://relay.damus.io",
+    "wss://relay.snort.social",
+    "wss://nos.lol",
+    "wss://nostr.holybea.com",
+    "wss://nostr.fmt.wiz.biz",
+    "wss://relay.snort.social",
+    "wss://nostr.oxtr.dev",
+    "wss://nostr.zebedee.cloud",
+    "wss://relay.nostr.info"
+  ],
+  "privateKeyHex": "",
+  "nostreamConfFilePath": ""
+}

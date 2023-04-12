@@ -1,0 +1,120 @@
+info:
+  relay_url: wss://nostrja-aggre-kari.heguro.com
+  name: nostrja-aggre-kari.heguro.com
+  description: |
+    my aggregator relay!!!!!!
+  pubkey: 93ab9382fa66c807cd4bb702cf3be9e52f42ff9629db84e5a97c7b3bd336a4ac
+  contact: mailto:a@example.com
+payments:
+  enabled: false
+  processor: zebedee
+  feeSchedules:
+    admission:
+    - enabled: false
+      descripton: Admission fee charged per public key in msats (1000 msats = 1 satoshi)
+      amount: 1000000
+      whitelists:
+        pubkeys:
+        - replace-with-your-pubkey-in-hex
+paymentsProcessors:
+  zebedee:
+    baseURL: https://api.zebedee.io/
+    callbackBaseURL: https://nostream.your-domain.com/callbacks/zebedee
+    ipWhitelist:
+      - "3.225.112.64"
+      - "::ffff:3.225.112.64"
+network:
+  maxPayloadSize: 524288
+  remoteIpHeader: x-forwarded-for
+workers:
+  count: 0
+mirroring:
+  static: []
+limits:
+  invoice:
+    rateLimits:
+    - period: 60000
+      rate: 6
+    - period: 3600000
+      rate: 16
+    ipWhitelist:
+    - "::1"
+    - "10.10.10.1"
+    - "::ffff:10.10.10.1"
+  connection:
+    rateLimits:
+    - period: 1
+      rate: 1200000
+    ipWhitelist:
+    - "::1"
+    - "10.10.10.1"
+    - "::ffff:10.10.10.1"
+  event:
+    eventId:
+      minLeadingZeroBits: 0
+    kind:
+      whitelist: []
+      blacklist: []
+    pubkey:
+      minBalance: 0
+      minLeadingZeroBits: 0
+      whitelist: [
+        # aggregator-relay-pubkeys-from
+        # aggregator-relay-pubkeys-to
+      ]
+      blacklist: []
+    createdAt:
+      maxPositiveDelta: 900
+      maxNegativeDelta: 0
+    content:
+    - description: 512 KB for event kind ranges 0-10 and 40-49 (edited)
+      kinds:
+      - - 0
+        - 10
+      - - 40
+        - 49
+      maxLength: 524288
+    - description: 20 MB for event kind ranges 30000-39999
+      kinds:
+      - - 0
+        - 10
+      - - 40
+        - 49
+      maxLength: 20000000
+    - description: 96 KB for event kind ranges 11-39 and 50-max
+      kinds:
+      - - 11
+        - 39
+      - - 50
+        - 9007199254740991
+      maxLength: 98304
+    rateLimits:
+    - description: 720000 events/hour for all events
+      period: 3600000
+      # 720
+      rate: 720000
+    - description: 288000 events/day for all events
+      period: 86400000
+      # 2880
+      rate: 2880000
+    whitelists:
+      pubkeys: []
+      ipAddresses:
+      - "::1"
+      - "127.0.0.1"
+  client:
+    subscription:
+      # 10
+      maxSubscriptions: 10000
+      # 10
+      maxFilters: 10000
+  message:
+    rateLimits:
+    - description: 240000 raw messages/min
+      period: 60000
+      # 240
+      rate: 240000
+    ipWhitelist:
+    - "::1"
+    - "10.10.10.1"
+    - "::ffff:10.10.10.1"
