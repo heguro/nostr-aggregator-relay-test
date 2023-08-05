@@ -71,15 +71,17 @@ const updatePubkeys = async () => {
   log(`adding ${pubkeysSending.length} pubkeys`);
 
   // apply new pubkeys whitelist
-  const nostreamConf = await readFile(config.nostreamConfFilePath, 'utf-8');
-  const spc = '        ';
-  const updatedConf = nostreamConf.replace(
-    / {8}# aggregator-relay-pubkeys-from\n[\s\S]*? {8}# aggregator-relay-pubkeys-to\n/,
-    `${spc}# aggregator-relay-pubkeys-from\n${pubkeys
-      .map(p => `${spc}"${p}",\n`)
-      .join('')}${spc}# aggregator-relay-pubkeys-to\n`,
-  );
-  await writeFile(config.nostreamConfFilePath, updatedConf, 'utf-8');
+  for (const nostreamConfFilePath of config.nostreamConfFilesPath) {
+    const nostreamConf = await readFile(nostreamConfFilePath, 'utf-8');
+    const spc = '        ';
+    const updatedConf = nostreamConf.replace(
+      / {8}# aggregator-relay-pubkeys-from\n[\s\S]*? {8}# aggregator-relay-pubkeys-to\n/,
+      `${spc}# aggregator-relay-pubkeys-from\n${pubkeys
+        .map(p => `${spc}"${p}",\n`)
+        .join('')}${spc}# aggregator-relay-pubkeys-to\n`,
+    );
+    await writeFile(nostreamConfFilePath, updatedConf, 'utf-8');
+  }
 
   // save new list to restore
   const unsignedEvent: NostrUnsignedEvent = {
@@ -178,7 +180,7 @@ const relayConnect = async (
     relay.close();
     return;
   }
-  const sub = relay.sub([{ kinds: [1], limit: 500 }], {
+  const sub = relay.sub([{ kinds: [0, 1, 5, 6, 7], limit: 500 }], {
     skipVerification: true,
   });
   sub.on('event', (event: NostrEvent) => {
@@ -194,6 +196,7 @@ const relayConnect = async (
         }
       } else if (
         // japanese + no url + no tags (not reply, not mostr)
+        event.kind === 1 &&
         /[ぁ-ん]/.test(event.content) &&
         !/https?:\/\//.test(event.content) &&
         !event.tags.length &&

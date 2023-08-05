@@ -20,5 +20,5 @@
   ],
   "remoteRelaysUserAgent": "nostr-aggregator-relay-test/1.0 (+https://github.com/heguro/nostr-aggregator-relay-test)",
   "privateKeyHex": "",
-  "nostreamConfFilePath": "../nostream/.nostr/settings.yaml"
+  "nostreamConfFilesPath": ["../nostream/.nostr/settings.yaml"]
 }
