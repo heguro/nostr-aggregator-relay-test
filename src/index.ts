@@ -198,7 +198,7 @@ const relayConnect = async (
         // japanese + no url + no tags (not reply, not mostr. ignores nonce)
         event.kind === 1 &&
         /[ぁ-ん]/.test(event.content) &&
-        !/https?:\/\//.test(event.content) &&
+        !/https?:\/\/| #/.test(event.content) &&
         !event.tags.filter(t => t[0] !== 'nonce').length &&
         NostrTools.verifySignature(event)
       ) {
